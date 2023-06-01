@@ -32,31 +32,31 @@ public class UserServiceImpl implements UserService{
     @Transactional
     public void saveUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userRepository.save(user);
+        userRepository.saveUser(user);
     }
 
     @Override
     @Transactional
     public void updateUser(User user) {
-        userRepository.save(user);
+        userRepository.saveUser(user);
     }
 
     @Override
     @Transactional
     public void deleteUser(Long id) {
-        userRepository.deleteById(id);
+        userRepository.deleteUser(id);
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<User> getAllUsers() {
-        return userRepository.findAll();
+        return userRepository.getAllUsers();
     }
 
     @Override
     @Transactional(readOnly = true)
     public User getUserById(Long id) {
-        return userRepository.getOne(id);
+        return userRepository.getUserById(id);
     }
 
     @Transactional(readOnly = true)
