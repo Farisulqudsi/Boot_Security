@@ -1,51 +1,45 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Admin Page</title>
-    <h3>All users</h3>
+    <title>Users</title>
 </head>
 <body>
-<table>
-    <tr>
-        <th>ID</th>
-        <th>Userame</th>
-        <th>YearOfBirth</th>
-        <th>Role</th>
-        <th>Edit</th>
-        <th>Delete</th>
-    </tr>
-    <tr th:each="user:${users}">
-        <td th:text="${user.getId()}"></td>
-        <td th:text="${user.getUsername()}"></td>
-        <td th:text="${user.getYearOfBirth()}"></td>
-        <td th:text="${user.getRoles()}"></td>
-        <td>
-            <form th:action="@{/admin/editUser/{id} (id = ${user.getId()})}">
-                <input type="submit" class="button1" value="Edit"></form>
-        </td>
-        <td>
-            <form th:method="DELETE" th:action="@{/admin/delete/{id}(id=${user.getId()})}">
-                <input type="submit" class="button2" value="Delete"></form>
-        </td>
-    </tr>
-</table>
-
+<div>
+    <h1>Users</h1>
+    <form th:action="@{/admin/add}">
+        <input type="submit" value="Add">
+    </form>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>UserName</th>
+            <th>DR</th>
+            <th>Password</th>
+            <th>Role</th>
+            <th>Action</th>
+        </tr>
+        <tr th:each="user : ${users}">
+            <td th:text="${user.getId()}"></td>
+            <td th:text="${user.getUsername()}"></td>
+            <td th:text="${user.getYearOfBirth()}"></td>
+            <td th:text="${user.getPassword()}"></td>
+            <td th:each="role : ${user.getRoles()}">
+                <p th:text="*{role.getRole()}"></p>
+            </td>
+            <td>
+                <form th:action="@{/admin/edit/{id}(id=${user.getId()})}">
+                    <input type="submit" value="Edit">
+                </form>
+                <form th:object="${user}" th:action="@{/admin/delete/{id}(id=${user.getId()})}" method="DELETE">
+                    <input type="submit" value="Delete">
+                </form>
+            </td>
+        </tr>
+    </table>
+</div>
+<form th:method="POST" th:action="@{/logout}">
+    <input type="submit" value="Logout"/>
+</form>
 </body>
-</br>
-
-<form action="/admin/createNewUser">
-    <button type="submit" class="button3">Add User</button>
-</form>
-</br>
-<form action="/user">
-    <button type="submit" class="button1">UserInfo</button>
-</form>
-</br>
-</br>
-<form action="/logout">
-    <button type="submit" class="button2">Logout</button>
-</form>
-
 </html>

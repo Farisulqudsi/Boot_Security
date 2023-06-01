@@ -1,34 +1,33 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
-      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<html lang="en">
 <head>
-    <title>User Info Page</title>
-    <h2>User information-page</h2>
+    <meta charset="UTF-8">
+    <title>User</title>
 </head>
 <body>
-<blockquote>
-
-    About user
-
-    <table>
+<h1>User</h1>
+<table>
+    <tr>
+        <th>ID</th>
+        <th>UserName</th>
+        <th>YOB</th>
+        <th>Password</th>
+        <th>Role</th>
+    </tr>
+    <div th:each="user : ${user}">
         <tr>
-            <th>Id</th>
-            <th>Username</th>
-            <th>YearOfBirth</th>
-            <th>Role</th>
+            <td th:text="${user.getId()}"></td>
+            <td th:text="${user.getUsername()}"></td>
+            <td th:text="${user.getYearOfBirth()}"></td>
+            <td th:text="${user.getPassword()}"></td>
+            <td th:each="role : ${user.getRoles()}">
+                <p th:text="*{role.getRole()}"></p>
+            </td>
         </tr>
-
-        <td th:text="${user.getId()}"></td>
-        <td th:text="${user.getUsername()}"></td>
-        <td th:text="${user.getYearOfBirth()}"></td>
-        <td th:text="${user.getRoles()}"></td>
-
-    </table>
-    </br>
-    <form action="/logout">
-        <button type="submit">Logout</button>
-    </form>
-
-</blockquote>
+    </div>
+</table>
+<form th:method="POST" th:action="@{/logout}">
+    <input type="submit" value="Logout"/>
+</form>
 </body>
 </html>

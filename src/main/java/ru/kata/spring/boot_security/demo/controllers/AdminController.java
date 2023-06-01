@@ -16,12 +16,10 @@ import java.util.List;
 public class AdminController {
 
     private final UserService userService;
-    private final RoleService roleService;
 
     @Autowired
     public AdminController(UserService userService, RoleService roleService) {
         this.userService = userService;
-        this.roleService = roleService;
     }
 
     @GetMapping()
@@ -33,35 +31,23 @@ public class AdminController {
     @GetMapping("/createNewUser")
     public String addNewUser(Model model) {
         model.addAttribute("user", new User());
-        model.addAttribute("listRoles", roleService.getListOfRoles());
         return "newUser";
     }
 
     @PostMapping("/saveUser")
     public String saveUser(@ModelAttribute("user") User user) {
-        List<Role> listRoles = new ArrayList<>();
-        for (Role role : user.getRoles()) {
-            listRoles.add(roleService.getRoleByName(role.getName()));
-        }
-        user.setRoles(listRoles);
         userService.saveUser(user);
         return "redirect:/admin";
     }
 
     @GetMapping("/editUser/{id}")
     public String getFormToUpdateUser(Model model, @PathVariable("id") Long id) {
-        model.addAttribute("user", userService.getUser(id));
-        model.addAttribute("listRoles", roleService.getListOfRoles());
+        model.addAttribute("user", userService.getUserById(id));
         return "editUser";
     }
 
-    @PatchMapping("/editUser/{id}")
-    public String updateUser(@ModelAttribute("user") User user) {
-        List<Role> listRoles = new ArrayList<>();
-        for (Role role : user.getRoles()) {
-            listRoles.add(roleService.getRoleByName(role.getName()));
-        }
-        user.setRoles(listRoles);
+    @PostMapping("/editUser/{id}")
+    public String updateUser(@ModelAttribute("user") User user,  @PathVariable("id") Long id) {
         userService.updateUser(user);
         return "redirect:/admin";
     }
@@ -70,6 +56,5 @@ public class AdminController {
     public String deleteUser(@PathVariable("id") Long id) {
         userService.deleteUser(id);
         return "redirect:/admin";
-
     }
 }

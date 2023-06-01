@@ -3,27 +3,32 @@ package ru.kata.spring.boot_security.demo.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.kata.spring.boot_security.demo.model.Role;
-import ru.kata.spring.boot_security.demo.repository.RoleDAO;
+import ru.kata.spring.boot_security.demo.repository.RoleRepository;
 
 import java.util.List;
 
 @Service
 public class RoleServiceImpl implements RoleService {
 
-    private RoleDAO roleDao;
+    private final RoleRepository roleRepository;
 
     @Autowired
-    public RoleServiceImpl(RoleDAO roleDao) {
-        this.roleDao = roleDao;
+    public RoleServiceImpl(RoleRepository roleRepository) {
+        this.roleRepository = roleRepository;
     }
 
     @Override
-    public Role getRoleByName(String name) {
-        return roleDao.getRoleByName(name);
+    public List<Role> getAllRoles() {
+        return roleRepository.findAll();
     }
 
     @Override
-    public List<Role> getListOfRoles() {
-        return roleDao.getListOfRoles();
+    public void deleteRoleById(long id) {
+        roleRepository.deleteById(id);
+    }
+
+    @Override
+    public void addRole(Role role) {
+        roleRepository.save(role);
     }
 }
